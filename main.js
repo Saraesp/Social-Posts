@@ -1,4 +1,4 @@
-const container = document.getElementById('.container')
+const container = document.getElementById('container')
 
 const userLikes = [];
 
@@ -61,7 +61,7 @@ const posts = [
 ];
 
 for (let i = 0; i < posts.length; i++){
-    const currentPost =posts[i];
+    const currentPost = posts[i];
     container.innerHTML += postTemplate(currentPost);
 }
 
@@ -70,20 +70,67 @@ function postTemplate(postData){
     const { id, author, content, created, media, likes} = postData;
     return `
     <div class="post">
-        <div class="post_header">
+        <div class="post__header">
             <div class="post-meta"> 
-                <div class="post-meta_icon"> 
+                <div class="post-meta__icon"> 
                 ${author.image ? profileImageTemplate(author) :
-                profileImageTemplate(author)}
+                profileImageDefaultTemplate(author)}
                 </div>
                 <div class="post-meta_data"> 
-                <div class="post-meta_author">${author.name}</div>
-                <div class="post-meta_time">${formatDate(created)}</div>
+                    <div class="post-meta__author">${author.name}</div>
+                    <div class="post-meta__time">${formatDate(created)}</div>
                 </div>
             </div>
         </div>
-        <div >
+        <div class="post__text">${content}</div>
+        <div class="post__image">
+            <img src="${media}" alt="">
         </div>
-    </div>
+        <div class="post__footer">
+            <div class="likes js-likes">
+                <div class="likes__cta">
+                    <a class="like-button ${isPostLiked(id) ? 'like-button--liked' : ''} js-like-button" href="#"">
+                        <i class="like-button__icon fas fa-thumbs-up"></i>
+                        <span class="like-button__label">Mi Piace</span>
+                    </a>
+                </div>
+                <div class="likes__counter">
+                    Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function profileImageTemplate(userData) {
+    const { name, image } = userData;
+    return `<img class="profile-pic" src="${image}" alt="${name}"`;
+    
+}
+
+function profileImageDefaultTemplate (userData){
+    const { name } = userData;
+
+    const nameParts = name.split('');
+
+    const letters = [];
+    for(let i = 0; i < nameParts.length; i++){
+        const namePart = nameParts[i];
+        const initialLetter = namePart[0];
+        letters.push(initialLetter);
+    }
+
+    const initials = letters.join('');
+
+    return`
+        <div class="profile-pic-default">
+            <span>${initials}</span>
+        </div>
     `
 }
+
+function formatDate(dateStr) {
+    return dateStr.split('-').reverse().join('/');
+}
+
+
