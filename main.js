@@ -95,7 +95,7 @@ function postTemplate(postData){
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone
+                    Piace a <b id="like-counter-${id}" class="js-like-counter">${likes}</b> persone
                 </div>
             </div>
         </div>
@@ -133,4 +133,39 @@ function formatDate(dateStr) {
     return dateStr.split('-').reverse().join('/');
 }
 
+function isPostLiked(postId) {
+    return userLikes.includes(postId);
+}
 
+const LikeButtons = document.querySelectorAll('.js-like-button');
+const LikeCounters = document.querySelectorAll('.js-like-counter');
+
+for(let i = 0; i < LikeButtons.length; i++){
+    const element = LikeButtons[i];
+    element.addEventListener('click', function (e){
+        e.preventDefault();
+
+        if(!element.classList.contains('like-button--liked')){
+            element.classList.add('like-button--liked');
+
+            const thisCounter = LikeCounters[i];
+
+            const number = parseInt(thisCounter.innerHTML);
+
+            thisCounter.innerHTML = number + 1;
+
+            const LikePost = posts[i];
+            LikePost.likes++;
+        } else {
+            element.classList.remove('like-button--liked');
+
+            const thisCounter = LikeCounters[i];
+
+            const number = parseInt(thisCounter.innerHTML);
+
+            thisCounter.innerHTML = number - 1;
+
+            const LikePost = posts[i];
+            LikePost.likes--;}
+    })
+}
